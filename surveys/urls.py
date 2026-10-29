@@ -9,8 +9,6 @@ urlpatterns = [
          name='survey-question'),
     path('surveys/<int:survey_id>/complete/', views.survey_complete,
          name='survey-complete'),
-    path('surveys/<int:survey_id>/stats/', views.survey_stats,
-         name='survey-stats'),
     path('api/surveys/<int:survey_id>/next-question/', api.next_question,
          name='api-next-question'),
     path('api/surveys/<int:survey_id>/answers/', api.submit_answer,

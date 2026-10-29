@@ -3,6 +3,7 @@
 {% block object-tools-items %}
   {% if original %}
     <li><a class="simple-editor-button" href="{% url 'admin:surveys_survey_editor' original.id %}">Вопросы и варианты</a></li>
+    <li><a href="{% url 'admin:surveys_survey_stats' original.id %}">Статистика</a></li>
   {% endif %}
   {{ block.super }}
 {% endblock %}

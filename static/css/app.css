@@ -84,6 +84,7 @@ fieldset { border: 0; padding: 0; margin: 0; }
 .check { width: 50px; height: 50px; border-radius: 50%; background: #e6f4ea; color: #188038; display: grid; place-items: center; font-size: 26px; margin: 0 auto 22px; }
 .stats-head { display: flex; justify-content: space-between; align-items: end; margin-bottom: 28px; }
 .summary-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 24px; }
+.summary-grid.four-columns { grid-template-columns: repeat(4, 1fr); }
 .summary-grid article { padding: 22px; }
 .summary-grid strong { display: block; font-size: 25px; color: var(--purple); margin-bottom: 6px; }
 .summary-grid span { color: var(--muted); font-size: 13px; }
@@ -93,6 +94,8 @@ fieldset { border: 0; padding: 0; margin: 0; }
 .result-row { display: flex; justify-content: space-between; border-top: 1px solid #eee; padding: 13px 0; }
 .result-row strong { color: var(--purple); }
 .muted { color: var(--muted); }
+.custom-answers-title { color: var(--muted); font-size: 13px; margin: 20px 0 8px; }
+.custom-answer { background: #f8f6fb; border-radius: 5px; margin-top: 6px; padding: 10px 12px; }
 .messages { display: grid; gap: 8px; margin-bottom: 20px; }
 .message { background: #fff; border-left: 4px solid var(--purple); border-radius: 4px; padding: 13px 16px; }
 .message.error { border-left-color: var(--danger); }
@@ -163,6 +166,7 @@ fieldset { border: 0; padding: 0; margin: 0; }
   .page { margin-top: 28px; }
   .survey-grid { grid-template-columns: 1fr; }
   .summary-grid { grid-template-columns: 1fr; }
+  .summary-grid.four-columns { grid-template-columns: 1fr; }
   .stats-head { align-items: start; gap: 20px; flex-direction: column; }
   .card-meta { flex-direction: column; gap: 7px; }
   .author-columns { grid-template-columns: 1fr; }

@@ -1,7 +1,8 @@
 from django.contrib import admin, messages
 from django.contrib.auth.models import Group
+from django.core.exceptions import PermissionDenied
 from django.db import transaction
-from django.db.models import Max
+from django.db.models import Count, Max
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
 from django.urls import path, reverse
@@ -56,6 +57,11 @@ class SurveyAdmin(admin.ModelAdmin):
     def get_urls(self):
         custom_urls = [
             path(
+                '<path:object_id>/stats/',
+                self.admin_site.admin_view(self.stats_view),
+                name='surveys_survey_stats',
+            ),
+            path(
                 '<path:object_id>/editor/',
                 self.admin_site.admin_view(self.editor_view),
                 name='surveys_survey_editor',
@@ -71,7 +77,6 @@ class SurveyAdmin(admin.ModelAdmin):
     def editor_view(self, request, object_id):
         survey = get_object_or_404(Survey, pk=object_id)
         if not self.has_change_permission(request, survey):
-            from django.core.exceptions import PermissionDenied
             raise PermissionDenied
 
         if request.method == 'POST':
@@ -91,6 +96,43 @@ class SurveyAdmin(admin.ModelAdmin):
             'has_change_permission': True,
         }
         return render(request, 'admin/surveys/survey/editor.html', context)
+
+    def stats_view(self, request, object_id):
+        survey = get_object_or_404(
+            Survey.objects.select_related('author'), pk=object_id
+        )
+        if not self.has_view_permission(request, survey):
+            raise PermissionDenied
+
+        statistic, _ = SurveyStatistic.objects.get_or_create(survey=survey)
+        started_count = survey.attempts.count()
+        completion_rate = round(
+            statistic.completed_count / started_count * 100
+        ) if started_count else 0
+        rows = []
+        for question in survey.questions.prefetch_related('choices'):
+            choices = question.choices.annotate(answer_count=Count('answers'))
+            custom_answers = question.answers.exclude(
+                custom_answer=''
+            ).values_list('custom_answer', flat=True)[:20]
+            rows.append({
+                'question': question,
+                'choices': choices,
+                'custom_answers': custom_answers,
+            })
+
+        context = {
+            **self.admin_site.each_context(request),
+            'opts': self.model._meta,
+            'title': f'Статистика: {survey.title}',
+            'survey': survey,
+            'statistic': statistic,
+            'started_count': started_count,
+            'completion_rate': completion_rate,
+            'rows': rows,
+            'has_view_permission': True,
+        }
+        return render(request, 'admin/surveys/survey/stats.html', context)
 
     def process_editor_action(self, request, survey):
         action = request.POST.get('action')
