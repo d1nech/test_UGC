@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block title %}{{ survey.title }}{% endblock %}
+{% block content %}
+<div class="form-wrap">
+  <section class="form-card hero-card">
+    <div class="purple-strip"></div>
+    <div class="form-content">
+      <h1>{{ survey.title }}</h1>
+      <p>{{ survey.description|default:'Ответьте на несколько коротких вопросов.' }}</p>
+      <div class="form-note">В опросе {{ survey.questions.count }} вопросов</div>
+    </div>
+  </section>
+  <form method="post" class="form-card question-card">
+    {% csrf_token %}
+    <label class="question-title" for="username">Как вас зовут? <span>*</span></label>
+    <input class="line-input" id="username" name="username" maxlength="150"
+           placeholder="Ваше имя" required autocomplete="name">
+    <div class="form-footer">
+      <button class="button" type="submit">Начать</button>
+      <span>Регистрация не требуется</span>
+    </div>
+  </form>
+</div>
+{% endblock %}

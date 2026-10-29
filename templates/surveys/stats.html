@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block title %}Статистика — {{ survey.title }}{% endblock %}
+{% block content %}
+<div class="stats-head">
+  <div><p class="eyebrow">РЕЗУЛЬТАТЫ</p><h1>{{ survey.title }}</h1></div>
+  <a class="button secondary" href="{% url 'survey-start' survey.id %}">Открыть опрос</a>
+</div>
+<section class="summary-grid">
+  <article><strong>{{ statistic.completed_count }}</strong><span>прохождений</span></article>
+  <article><strong>{{ survey.attempts.count }}</strong><span>начали опрос</span></article>
+  <article><strong>{{ statistic.average_duration_seconds }} сек.</strong><span>среднее время</span></article>
+</section>
+<section class="results-list">
+  {% for row in rows %}
+    <article class="result-card">
+      <h2>{{ row.question.text }}</h2>
+      {% for choice in row.choices %}
+        <div class="result-row">
+          <span>{{ choice.text }}</span><strong>{{ choice.answer_count }}</strong>
+        </div>
+      {% endfor %}
+      {% if row.question.allow_custom_answer %}
+        <div class="result-row muted"><span>Свои ответы</span><strong>{{ row.custom_count }}</strong></div>
+      {% endif %}
+    </article>
+  {% empty %}
+    <article class="result-card"><h2>Вопросов пока нет</h2></article>
+  {% endfor %}
+</section>
+{% endblock %}

@@ -1,0 +1,13 @@
+.env
+.venv/
+.venv_local/
+.tmp/
+.deps/
+__pycache__/
+*.py[cod]
+*.sqlite3
+*.zip
+.git_push/
+.idea/
+.vscode/
+staticfiles/

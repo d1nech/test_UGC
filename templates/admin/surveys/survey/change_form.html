@@ -1,0 +1,8 @@
+{% extends "admin/change_form.html" %}
+
+{% block object-tools-items %}
+  {% if original %}
+    <li><a class="simple-editor-button" href="{% url 'admin:surveys_survey_editor' original.id %}">Вопросы и варианты</a></li>
+  {% endif %}
+  {{ block.super }}
+{% endblock %}

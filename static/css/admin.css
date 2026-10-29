@@ -1,0 +1,66 @@
+:root {
+  --primary: #673ab7;
+  --secondary: #522e92;
+  --accent: #fff;
+  --header-color: #fff;
+  --header-bg: #673ab7;
+  --header-link-color: #fff;
+  --breadcrumbs-bg: #522e92;
+  --breadcrumbs-fg: #fff;
+  --link-fg: #673ab7;
+  --link-hover-color: #45257e;
+  --button-bg: #673ab7;
+  --button-hover-bg: #522e92;
+  --default-button-bg: #673ab7;
+  --default-button-hover-bg: #522e92;
+  --body-bg: #f0ebf8;
+  --body-fg: #202124;
+}
+
+body { font-family: Arial, sans-serif; }
+#header { min-height: 62px; padding: 0 28px; }
+#branding { display: flex; align-items: center; }
+.ugc-admin-brand { color: #fff !important; display: flex; align-items: center; gap: 11px; text-decoration: none; }
+.ugc-admin-brand span {
+  background: #fff; color: #673ab7; width: 34px; height: 34px; border-radius: 7px;
+  display: grid; place-items: center; font-size: 18px; font-weight: 700;
+}
+.ugc-admin-brand strong { font-size: 18px; font-weight: 500; }
+#user-tools { font-size: 12px; }
+#nav-global { margin-left: auto; padding-left: 24px; }
+.editor-link {
+  display: inline-flex; align-items: center; min-height: 34px; padding: 0 15px;
+  background: #fff; color: #673ab7 !important; border-radius: 4px; font-weight: 600;
+  text-decoration: none;
+}
+div.breadcrumbs { padding: 13px 28px; }
+#content { padding: 28px; }
+#content-main, #content-related { border-radius: 8px; }
+.module, .inline-group, #changelist .actions {
+  border-radius: 8px; overflow: hidden; border: 1px solid #dadce0; background: #fff;
+}
+.module h2, .module caption, .inline-group h2 { padding: 12px 15px; }
+.dashboard .module table th, .dashboard .module table td { padding: 12px 15px; }
+.dashboard #content { width: min(1050px, calc(100% - 56px)); }
+.dashboard #content-main { width: 68%; }
+.dashboard #content-related { width: 28%; background: #fff; border: 1px solid #dadce0; }
+#changelist { background: #fff; border-radius: 8px; padding: 16px; border: 1px solid #dadce0; }
+#changelist-filter { border-radius: 8px; }
+.object-tools a, .button, input[type=submit], input[type=button], .submit-row input {
+  border-radius: 4px; min-height: 34px;
+}
+.object-tools a.simple-editor-button { background: #673ab7; }
+.object-tools a.simple-editor-button:hover { background: #522e92; }
+.form-row { padding: 14px 12px; }
+.submit-row { border-radius: 8px; border: 1px solid #dadce0; background: #fff; }
+input[type=text], input[type=password], input[type=email], input[type=url], input[type=number],
+textarea, select { border: 1px solid #bdc1c6; border-radius: 4px; padding: 8px 10px; }
+input:focus, textarea:focus, select:focus { border-color: #673ab7; outline: 1px solid #673ab7; }
+
+@media (max-width: 767px) {
+  #header { padding: 10px 16px; }
+  #nav-global { padding-left: 0; }
+  #content { padding: 18px 14px; }
+  .dashboard #content { width: auto; }
+  .dashboard #content-main, .dashboard #content-related { width: 100%; }
+}

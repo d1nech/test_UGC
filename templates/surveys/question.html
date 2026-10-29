@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% block title %}{{ survey.title }}{% endblock %}
+{% block content %}
+<div class="form-wrap">
+  <div class="progress-row">
+    <span>Вопрос {{ answered|add:1 }} из {{ total }}</span>
+    <div class="progress"><i style="width: {{ progress }}%"></i></div>
+  </div>
+  <section class="form-card compact-title">
+    <div class="purple-strip"></div>
+    <div class="form-content"><h1>{{ survey.title }}</h1></div>
+  </section>
+  <form method="post" class="form-card question-card">
+    {% csrf_token %}
+    <fieldset>
+      <legend class="question-title">{{ question.text }} <span>*</span></legend>
+      {% for choice in question.choices.all %}
+        <label class="choice">
+          <input type="radio" name="choice" value="{{ choice.id }}">
+          <i></i><span>{{ choice.text }}</span>
+        </label>
+      {% endfor %}
+      {% if question.allow_custom_answer %}
+        <label class="custom-label" for="custom_answer">Другой вариант</label>
+        <input class="line-input" id="custom_answer" name="custom_answer"
+               maxlength="2000" placeholder="Введите свой ответ">
+      {% endif %}
+    </fieldset>
+    {% if error %}<p class="error">{{ error }}</p>{% endif %}
+    <div class="form-footer">
+      <button class="button" type="submit">Далее</button>
+      <span>{{ answered }} из {{ total }} отвечено</span>
+    </div>
+  </form>
+</div>
+{% endblock %}

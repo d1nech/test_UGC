@@ -1,0 +1,97 @@
+{% extends "admin/base_site.html" %}
+{% load static %}
+
+{% block extrastyle %}
+  {{ block.super }}
+  <link rel="stylesheet" href="{% static 'css/app.css' %}">
+{% endblock %}
+
+{% block breadcrumbs %}
+<div class="breadcrumbs">
+  <a href="{% url 'admin:index' %}">Главная</a> ›
+  <a href="{% url 'admin:surveys_survey_changelist' %}">Опросы</a> ›
+  {{ survey.title }}
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="editor-top">
+  <h1>Редактор опроса</h1>
+  <div>
+    <a class="text-link" href="{% url 'survey-start' survey.id %}">Открыть опрос</a>
+    <a class="text-link" href="{% url 'survey-stats' survey.id %}">Статистика</a>
+  </div>
+</div>
+
+<form method="post" class="editor-card survey-settings">
+  {% csrf_token %}<input type="hidden" name="action" value="update_survey">
+  <div class="purple-strip"></div>
+  <div class="editor-inner simple-form">
+    <label>Название<input name="title" value="{{ survey.title }}" maxlength="200" required></label>
+    <label>Описание<textarea name="description" rows="3">{{ survey.description }}</textarea></label>
+    <div class="inline-footer">
+      <label class="check-label"><input type="checkbox" name="is_active" {% if survey.is_active %}checked{% endif %}> Опрос активен</label>
+      <button class="button" type="submit">Сохранить</button>
+    </div>
+  </div>
+</form>
+
+<div class="question-editor-list">
+  {% for question in survey.questions.all %}
+    <article class="editor-card question-editor">
+      <div class="question-number">Вопрос {{ forloop.counter }}</div>
+      <form method="post" class="question-main-form">
+        {% csrf_token %}<input type="hidden" name="action" value="update_question"><input type="hidden" name="question_id" value="{{ question.id }}">
+        <textarea name="text" rows="2" required>{{ question.text }}</textarea>
+        <div class="inline-footer">
+          <label class="check-label"><input type="checkbox" name="allow_custom_answer" {% if question.allow_custom_answer %}checked{% endif %}> Разрешить свой ответ</label>
+          <button class="small-button" type="submit">Сохранить вопрос</button>
+        </div>
+      </form>
+
+      <div class="choice-editor-list">
+        {% for choice in question.choices.all %}
+          <div class="choice-editor-row">
+            <span class="choice-dot"></span>
+            <form method="post" class="choice-text-form">
+              {% csrf_token %}<input type="hidden" name="action" value="update_choice"><input type="hidden" name="choice_id" value="{{ choice.id }}">
+              <input name="text" value="{{ choice.text }}" maxlength="300" required><button type="submit">✓</button>
+            </form>
+            <div class="move-actions">
+              <form method="post">{% csrf_token %}<input type="hidden" name="action" value="move_choice"><input type="hidden" name="choice_id" value="{{ choice.id }}"><input type="hidden" name="direction" value="up"><button title="Выше">↑</button></form>
+              <form method="post">{% csrf_token %}<input type="hidden" name="action" value="move_choice"><input type="hidden" name="choice_id" value="{{ choice.id }}"><input type="hidden" name="direction" value="down"><button title="Ниже">↓</button></form>
+              <form method="post" onsubmit="return confirm('Удалить вариант?')">{% csrf_token %}<input type="hidden" name="action" value="delete_choice"><input type="hidden" name="choice_id" value="{{ choice.id }}"><button class="danger-action" title="Удалить">×</button></form>
+            </div>
+          </div>
+        {% endfor %}
+        <form method="post" class="add-choice-form">
+          {% csrf_token %}<input type="hidden" name="action" value="add_choice"><input type="hidden" name="question_id" value="{{ question.id }}">
+          <span>＋</span><input name="text" maxlength="300" placeholder="Добавить вариант" required><button type="submit">Добавить</button>
+        </form>
+      </div>
+
+      <div class="question-actions">
+        <div class="move-actions">
+          <form method="post">{% csrf_token %}<input type="hidden" name="action" value="move_question"><input type="hidden" name="question_id" value="{{ question.id }}"><input type="hidden" name="direction" value="up"><button>↑ Выше</button></form>
+          <form method="post">{% csrf_token %}<input type="hidden" name="action" value="move_question"><input type="hidden" name="question_id" value="{{ question.id }}"><input type="hidden" name="direction" value="down"><button>↓ Ниже</button></form>
+        </div>
+        <form method="post" onsubmit="return confirm('Удалить вопрос и его ответы?')">
+          {% csrf_token %}<input type="hidden" name="action" value="delete_question"><input type="hidden" name="question_id" value="{{ question.id }}"><button class="danger-link" type="submit">Удалить вопрос</button>
+        </form>
+      </div>
+    </article>
+  {% empty %}
+    <div class="empty-line">Вопросов пока нет</div>
+  {% endfor %}
+</div>
+
+<form method="post" class="editor-card add-question-card simple-form">
+  {% csrf_token %}<input type="hidden" name="action" value="add_question">
+  <h2>Добавить вопрос</h2>
+  <label>Текст вопроса<textarea name="text" rows="2" required></textarea></label>
+  <div class="inline-footer">
+    <label class="check-label"><input type="checkbox" name="allow_custom_answer"> Разрешить свой ответ</label>
+    <button class="button" type="submit">Добавить</button>
+  </div>
+</form>
+{% endblock %}

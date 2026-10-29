@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block title %}Ответ записан{% endblock %}
+{% block content %}
+<div class="form-wrap">
+  <section class="form-card hero-card">
+    <div class="purple-strip"></div>
+    <div class="form-content complete-content">
+      <div class="check">✓</div>
+      <h1>Ответ записан</h1>
+      <p>Спасибо, что прошли опрос «{{ survey.title }}».</p>
+      <a class="text-link" href="{% url 'survey-list' %}">Вернуться к опросам</a>
+    </div>
+  </section>
+</div>
+{% endblock %}

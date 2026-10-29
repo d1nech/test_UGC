@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% block title %}Доступные опросы{% endblock %}
+{% block content %}
+<section class="intro">
+  <p class="eyebrow">UGC ОПРОСЫ</p>
+  <h1>Поделитесь своим мнением</h1>
+  <p>Выберите опрос. Для участия достаточно указать имя.</p>
+</section>
+<section class="survey-grid">
+  {% for survey in surveys %}
+    <article class="survey-card">
+      <div class="card-stripe"></div>
+      <div class="card-body">
+        <h2>{{ survey.title }}</h2>
+        <p>{{ survey.description|default:'Короткий пользовательский опрос'|truncatechars:130 }}</p>
+        <div class="card-meta">
+          <span>{{ survey.questions.count }} вопросов</span>
+          <span>Автор: {{ survey.author.username }}</span>
+        </div>
+        <div class="card-actions">
+          <a class="button" href="{% url 'survey-start' survey.id %}">Пройти</a>
+          <a class="text-link" href="{% url 'survey-stats' survey.id %}">Статистика</a>
+        </div>
+      </div>
+    </article>
+  {% empty %}
+    <article class="empty-card">
+      <h2>Опросов пока нет</h2>
+      <p>Автор может создать первый опрос в панели администратора.</p>
+      <a class="button" href="/admin/">Открыть панель</a>
+    </article>
+  {% endfor %}
+</section>
+{% endblock %}
